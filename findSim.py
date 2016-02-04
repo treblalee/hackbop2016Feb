@@ -1,4 +1,3 @@
-#!/home/ubuntu/hackbop2016Feb/bin/python
 from PIL import Image
 import imagehash
 import distance
@@ -11,9 +10,9 @@ Demo of hashing
 def find_similar_images_by_url(inputUrl):
     #inputUrl = "https://s3.amazonaws.com/treblalee.images/kates4273592641_p1_1-0._SH20_QL90_UY295_.jpg"
     #inputUrl = "https://s3.amazonaws.com/treblalee.images/alice4392863185_p1_1-0._SH20_QL90_UY295_.jpg"
-    return find_similar_images("/home/ubuntu/hackbop2016Feb/testImages", imagehash.dhash, inputUrl)
+    return find_similar_images("testImages", imagehash.dhash, inputUrl)
 
-def find_similar_images(userpath = "/home/ubuntu/hackbop2016Feb/testImages", hashfunc = imagehash.dhash, inputUrl = "https://s3.amazonaws.com/treblalee.images/alice4392863185_p1_1-0._SH20_QL90_UY295_.jpg"):
+def find_similar_images(userpath = "testImages", hashfunc = imagehash.dhash, inputUrl = "https://s3.amazonaws.com/treblalee.images/alice4392863185_p1_1-0._SH20_QL90_UY295_.jpg"):
     import os
     def is_image(filename):
     	f = filename.lower()
@@ -31,7 +30,7 @@ def find_similar_images(userpath = "/home/ubuntu/hackbop2016Feb/testImages", has
         dist = distance.hamming(inputHash, hash)
         #print inputHash + " " + hash + " " + str(dist)
         if dist < 10 and dist > 0:
-    	    simList.append(img.replace('/home/ubuntu/hackbop2016Feb/testImages/', 'https://s3.amazonaws.com/treblalee.images/'))
+    	    simList.append(img.replace('testImages/', 'https://s3.amazonaws.com/treblalee.images/'))
 
     result = {}
     result["input"] = inputUrl

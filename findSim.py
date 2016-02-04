@@ -19,10 +19,21 @@ def find_similar_images(userpath = "testImages", hashfunc = imagehash.dhash, inp
     	return f.endswith(".png") or f.endswith(".jpg") or \
     		f.endswith(".jpeg") or f.endswith(".bmp") or f.endswith(".gif")
 
+    # get image url to detail page mapping
+    imageToDetailPageMapping = {}
+    mappingFile = open("imageUrlToDetailPageMapping.txt")
+    for line in mappingFile:
+        fields = line.strip("\n").split(",")
+        imageUrl = str(urllib.unquote(fields[0]).decode('utf8'))
+        detailPageUrl = str(urllib.unquote(fields[1]).decode('utf8'))
+        imageToDetailPageMapping[imageUrl] = detailPageUrl
+
+    # compute hash of input image
     fd = urllib.urlopen(inputUrl)
     image_file = io.BytesIO(fd.read())
     inputHash = str(hashfunc(Image.open(image_file)))
     
+    # compute hashes of all images in DB (currently just a directory)
     image_filenames = [os.path.join(userpath, path) for path in os.listdir(userpath) if is_image(path)]
     simList = []
     for img in sorted(image_filenames):
@@ -30,7 +41,12 @@ def find_similar_images(userpath = "testImages", hashfunc = imagehash.dhash, inp
         dist = distance.hamming(inputHash, hash)
         #print inputHash + " " + hash + " " + str(dist)
         if dist < 10 and dist > 0:
-    	    simList.append(img.replace('testImages/', 'https://s3.amazonaws.com/treblalee.images/'))
+            imageUrl = img.replace('testImages/', 'https://s3.amazonaws.com/treblalee.images/')
+            detailPageUrl = imageToDetailPageMapping[imageUrl]
+            pair = {}
+            pair["imageUrl"] = imageUrl
+            pair["detailPageUrl"] = detailPageUrl
+    	    simList.append(pair)
 
     result = {}
     result["input"] = inputUrl

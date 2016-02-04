@@ -12,7 +12,11 @@ def find_similar_images_by_url(inputUrl):
     #inputUrl = "https://s3.amazonaws.com/treblalee.images/alice4392863185_p1_1-0._SH20_QL90_UY295_.jpg"
     return find_similar_images("testImages", imagehash.dhash, inputUrl)
 
-def find_similar_images(userpath = "testImages", hashfunc = imagehash.dhash, inputUrl = "https://s3.amazonaws.com/treblalee.images/alice4392863185_p1_1-0._SH20_QL90_UY295_.jpg"):
+def find_similar_images_by_file_path(path):
+    #path = "testImages/alice4392863185_p1_1-0._SH20_QL90_UY295_.jpg"
+    return find_similar_images("testImages", imagehash.dhash, "", "", path)
+
+def find_similar_images(userpath = "testImages", hashfunc = imagehash.dhash, inputUrl = "https://s3.amazonaws.com/treblalee.images/alice4392863185_p1_1-0._SH20_QL90_UY295_.jpg", base64Image = "", inputFilePath = ""):
     import os
     def is_image(filename):
     	f = filename.lower()
@@ -29,8 +33,13 @@ def find_similar_images(userpath = "testImages", hashfunc = imagehash.dhash, inp
         imageToDetailPageMapping[imageUrl] = detailPageUrl
 
     # compute hash of input image
-    fd = urllib.urlopen(inputUrl)
-    image_file = io.BytesIO(fd.read())
+    if len(inputFilePath) > 0:
+        image_file = inputFilePath
+        inputAsString = inputFilePath
+    else:
+        fd = urllib.urlopen(inputUrl)
+        image_file = io.BytesIO(fd.read())
+        inputAsString = inputUrl
     inputHash = str(hashfunc(Image.open(image_file)))
     
     # compute hashes of all images in DB (currently just a directory)
@@ -49,7 +58,7 @@ def find_similar_images(userpath = "testImages", hashfunc = imagehash.dhash, inp
     	    simList.append(pair)
 
     result = {}
-    result["input"] = inputUrl
+    result["input"] = inputAsString
     result["output"] = simList 
     print result
     return result

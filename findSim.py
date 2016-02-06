@@ -10,15 +10,12 @@ Demo of hashing
 cache = {}
 
 def find_similar_images_by_url(inputUrl):
-    #inputUrl = "https://s3.amazonaws.com/treblalee.images/kates4273592641_p1_1-0._SH20_QL90_UY295_.jpg"
-    #inputUrl = "https://s3.amazonaws.com/treblalee.images/alice4392863185_p1_1-0._SH20_QL90_UY295_.jpg"
     return find_similar_images("testImages", imagehash.dhash, inputUrl)
 
 def find_similar_images_by_file_path(path):
-    #path = "testImages/alice4392863185_p1_1-0._SH20_QL90_UY295_.jpg"
     return find_similar_images("testImages", imagehash.dhash, "", "", path)
 
-def find_similar_images(userpath = "testImages", hashfunc = imagehash.dhash, inputUrl = "https://s3.amazonaws.com/treblalee.images/alice4392863185_p1_1-0._SH20_QL90_UY295_.jpg", base64Image = "", inputFilePath = ""):
+def find_similar_images(userpath = "testImages", hashfunc = imagehash.dhash, inputUrl = "https://s3.amazonaws.com/treblalee.images/107.jpg", base64Image = "", inputFilePath = ""):
     import os
     global cache
 

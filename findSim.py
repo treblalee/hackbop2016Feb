@@ -7,6 +7,8 @@ import io
 """
 Demo of hashing
 """
+cache = {}
+
 def find_similar_images_by_url(inputUrl):
     #inputUrl = "https://s3.amazonaws.com/treblalee.images/kates4273592641_p1_1-0._SH20_QL90_UY295_.jpg"
     #inputUrl = "https://s3.amazonaws.com/treblalee.images/alice4392863185_p1_1-0._SH20_QL90_UY295_.jpg"
@@ -18,6 +20,8 @@ def find_similar_images_by_file_path(path):
 
 def find_similar_images(userpath = "testImages", hashfunc = imagehash.dhash, inputUrl = "https://s3.amazonaws.com/treblalee.images/alice4392863185_p1_1-0._SH20_QL90_UY295_.jpg", base64Image = "", inputFilePath = ""):
     import os
+    global cache
+
     def is_image(filename):
     	f = filename.lower()
     	return f.endswith(".png") or f.endswith(".jpg") or \
@@ -46,10 +50,14 @@ def find_similar_images(userpath = "testImages", hashfunc = imagehash.dhash, inp
     image_filenames = [os.path.join(userpath, path) for path in os.listdir(userpath) if is_image(path)]
     simList = []
     for img in sorted(image_filenames):
-    	hash = str(hashfunc(Image.open(img)))
+        if img in cache:
+            hash = cache[img]
+        else:
+    	    hash = str(hashfunc(Image.open(img)))
+            cache[img] = hash
         dist = distance.hamming(inputHash, hash)
-        #print inputHash + " " + hash + " " + str(dist)
-        if dist < 10 and dist > 0:
+        print inputHash + " " + hash + " " + str(dist)
+        if dist < 6 and dist > 0:
             imageUrl = img.replace('testImages/', 'https://s3.amazonaws.com/treblalee.images/')
             detailPageUrl = imageToDetailPageMapping[imageUrl]
             pair = {}
@@ -60,7 +68,7 @@ def find_similar_images(userpath = "testImages", hashfunc = imagehash.dhash, inp
     result = {}
     result["input"] = inputAsString
     result["output"] = simList 
-    print result
+    #print result
     return result
 
 

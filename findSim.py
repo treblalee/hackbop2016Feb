@@ -13,9 +13,9 @@ def find_similar_images_by_url(inputUrl):
     return find_similar_images("testImages", imagehash.dhash, inputUrl)
 
 def find_similar_images_by_file_path(path):
-    return find_similar_images("testImages", imagehash.dhash, "", "", path)
+    return find_similar_images("testImages", imagehash.dhash, "", path)
 
-def find_similar_images(userpath = "testImages", hashfunc = imagehash.dhash, inputUrl = "https://s3.amazonaws.com/treblalee.images/107.jpg", base64Image = "", inputFilePath = ""):
+def find_similar_images(userpath = "testImages", hashfunc = imagehash.dhash, inputUrl = "https://s3.amazonaws.com/treblalee.images/107.jpg", inputFilePath = ""):
     import os
     global cache
 

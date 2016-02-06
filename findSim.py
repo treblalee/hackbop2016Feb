@@ -10,12 +10,12 @@ Demo of hashing
 cache = {}
 
 def find_similar_images_by_url(inputUrl):
-    return find_similar_images("testImages", imagehash.dhash, inputUrl)
+    return find_similar_images("localS3Images", imagehash.dhash, inputUrl)
 
 def find_similar_images_by_file_path(path):
-    return find_similar_images("testImages", imagehash.dhash, "", path)
+    return find_similar_images("localS3Images", imagehash.dhash, "", path)
 
-def find_similar_images(userpath = "testImages", hashfunc = imagehash.dhash, inputUrl = "https://s3.amazonaws.com/treblalee.images/watches7.jpg", inputFilePath = ""):
+def find_similar_images(userpath = "localS3Images", hashfunc = imagehash.dhash, inputUrl = "https://s3.amazonaws.com/treblalee.images/watches7.jpg", inputFilePath = ""):
     import os
     global cache
 
@@ -55,7 +55,7 @@ def find_similar_images(userpath = "testImages", hashfunc = imagehash.dhash, inp
         dist = distance.hamming(inputHash, hash)
         print inputHash + " " + hash + " " + str(dist)
         if dist < 6 and dist > 0:
-            imageUrl = img.replace('testImages/', 'https://s3.amazonaws.com/treblalee.images/')
+            imageUrl = img.replace('localS3Images/', 'https://s3.amazonaws.com/treblalee.images/')
             detailPageUrl = imageToDetailPageMapping[imageUrl]
             pair = {}
             pair["imageUrl"] = imageUrl

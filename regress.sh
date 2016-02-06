@@ -5,7 +5,7 @@ HOST='localhost'
 PORT='8000'
 HOME_ENDPOINT="$HOST:$PORT"
 SIM_ENDPOINT="$HOME_ENDPOINT/similar?image=https://s3.amazonaws.com/treblalee.images/watches7.jpg"
-SIM_PATH_ENDPOINT="$HOME_ENDPOINT/similarbypath?image=testImages/watches7.jpg"
+SIM_PATH_ENDPOINT="$HOME_ENDPOINT/similarbypath?image=localS3Images/watches7.jpg"
 echo
 echo "Result of http get request for $HOME_ENDPOINT"
 curl -XGET $HOME_ENDPOINT

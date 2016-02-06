@@ -3,6 +3,7 @@ import imagehash
 import distance
 import urllib2 as urllib
 import io
+import json
 
 """
 Demo of hashing
@@ -66,7 +67,7 @@ def find_similar_images(userpath = "localS3Images", hashfunc = imagehash.dhash, 
     result["input"] = inputAsString
     result["output"] = simList 
     #print result
-    return result
+    return json.dumps(result, sort_keys=True, indent=4, separators=(',', ': ')) 
 
 
 if __name__ == '__main__':

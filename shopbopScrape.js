@@ -1,6 +1,7 @@
 // run in chrome console on shopbop browse page
 
 INIT_INDEX = 0
+IMG_PREFIX = 'jeans'
 
 // get the products
 products = []
@@ -21,7 +22,7 @@ for (i=0; i<products.length; ++i) {
   splitted_pic = products[i].pic.split('/')
   img_name = INIT_INDEX+i 
 
-  curl_str+='curl ' + products[i].pic + ' > ' + img_name + '.jpg' + '\n'
+  curl_str+='curl ' + products[i].pic + ' > ' + IMG_PREFIX + img_name + '.jpg' + '\n'
 }
 
 // get the metadata str
@@ -31,7 +32,7 @@ for (i=0; i<products.length; ++i) {
  pic = products[i].pic
  img_name = INIT_INDEX+i 
 
-  metadata_str+='https://s3.amazonaws.com/treblalee.images/' + img_name +'.jpg,' + detailPage + '\n'
+  metadata_str+='https://s3.amazonaws.com/treblalee.images/' + IMG_PREFIX + img_name +'.jpg,' + detailPage + '\n'
 }
 
 // use the following two js queries to copy the respective variables to clipboard

@@ -30,8 +30,27 @@ HTTP_GET_JOSEPH = """
 </html>
 """
 
+HTTP_RESPONSE = """$def with (pairs)
+<html>
+ <body>
+  <h1>Pleave provide an image to see similar products on Shopbop<h1>
+  <form name="testForm" action="http://hackbop.treblalee.com" method="post" enctype="multipart/form-data">
+   <input type="file" name="uploadField"/>
+   <input type="submit" value="Submit">
+  </form>
+  $for pair in pairs:
+    <p>
+      <a href=\"$pair["detailPageUrl"]\">
+        <img src=\"$pair["imageUrl"]\">
+      </a>
+    </p>
+ </body>
+</html>
+"""
+
 
 urls = (
+    '/', 'home',
     '/searchImageAlbert', 'albert_search_image',
     '/searchImageJoseph', 'joseph_search_image'
 )
@@ -69,9 +88,8 @@ def albert_call_img_search_algorithm(uploaded_file):
 		print 'Reason: ', e.reason
 		# TODO: raise error
 
-	img_search_result_json = json.loads(img_search_result)
-
-	return json.dumps(img_search_result_json['output'])
+	img_search_result = json.loads(img_search_result)
+	return img_search_result
 
 def joseph_dummy_result():
 	searchUrl = 'https://www.shopbop.com/actions/viewSearchResultsAction.action?searchButton=Submit&query=Dress+Green&searchSuggestion=false'
@@ -91,9 +109,9 @@ class albert_search_image:
 		uploaded_file = save_image_locally(web_input.uploadField)
 		print "uploaded_file: " + uploaded_file
 
-		result_json = albert_call_img_search_algorithm(uploaded_file)
+		result = albert_call_img_search_algorithm(uploaded_file)
 
-		return result_json
+		return json.dumps(result["output"], sort_keys=True, indent=4, separators=(',', ': '))
 
 class joseph_search_image:
 	def GET(self):
@@ -104,6 +122,23 @@ class joseph_search_image:
 		print web_input.uploadField.filename
 		return joseph_dummy_result()
     	
+
+class home:
+	def GET(self):
+                template = web.template.Template(HTTP_RESPONSE)
+		return template([])
+
+	def POST(self):
+		web_input = web.input(uploadField={})    
+		print "Recieved: " + web_input.uploadField.filename
+
+		uploaded_file = save_image_locally(web_input.uploadField)
+		print "uploaded_file: " + uploaded_file
+
+		result = albert_call_img_search_algorithm(uploaded_file)
+
+		template = web.template.Template(HTTP_RESPONSE)
+		return template(result["output"])
 
 if __name__ == "__main__":
     app.run()

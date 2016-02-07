@@ -30,7 +30,7 @@ HTTP_GET_JOSEPH = """
 </html>
 """
 
-HTTP_TEMPLATE_RESPONSE = """$def with (pairs)
+HTTP_TEMPLATE_RESPONSE = """$def with (pairs, inputUrl = "")
 <html>
  <body>
   <header><h1>Pleave provide an image to see similar products on Shopbop<h1></header>
@@ -39,12 +39,17 @@ HTTP_TEMPLATE_RESPONSE = """$def with (pairs)
       Upload an image here: <input type="file" name="uploadField" value=""/>
     </p>
     <p>
-      Or provide an image url here: <input type="text" name="imageUrl" value=""/>
+      Or provide an image url such as https://s3.amazonaws.com/treblalee.images/watches7.jpg here: <input type="text" name="imageUrl" value=""/>
     </p>
     <p>
       <input type="submit" value="Submit">
     </p>
   </form>
+  $if len(inputUrl) > 0:
+    <header><h2>Your image<h2></header>
+    <p>
+      <img src=\"$inputUrl\">
+    </p>
   $if len(pairs) > 0:
     <header><h2>Similar Shopbop products below<h2></header>
     $for pair in pairs:
@@ -155,7 +160,7 @@ class home:
 		template = web.template.Template(HTTP_TEMPLATE_RESPONSE)
 
                 if "output" in result:
-			return template(result["output"])
+			return template(result["output"], web_input_url_field.imageUrl)
                 else:
 			return template([])
 

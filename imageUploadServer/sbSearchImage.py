@@ -33,13 +33,20 @@ HTTP_GET_JOSEPH = """
 HTTP_TEMPLATE_RESPONSE = """$def with (pairs)
 <html>
  <body>
-  <h1>Pleave provide an image to see similar products on Shopbop<h1>
+  <header><h1>Pleave provide an image to see similar products on Shopbop<h1></header>
   <form name="testForm" action="http://hackbop.treblalee.com" method="post" enctype="multipart/form-data">
-   <input type="file" name="uploadField"/>
-   <input type="submit" value="Submit">
+    <p>
+      Upload an image here: <input type="file" name="uploadField" value=""/>
+    </p>
+    <p>
+      Or provide an image url here: <input type="text" name="imageUrl" value=""/>
+    </p>
+    <p>
+      <input type="submit" value="Submit">
+    </p>
   </form>
   $if len(pairs) > 0:
-    <h2>Similar Shopbop products below<h2>
+    <header><h2>Similar Shopbop products below<h2></header>
     $for pair in pairs:
       <p>
         <a href=\"$pair["detailPageUrl"]\">
@@ -58,6 +65,7 @@ urls = (
 )
 
 ALBERT_SEARCH_WEBADDRESS = 'http://localhost:8000/similarbypath?image='
+SEARCH_BY_URL_ADDRESS = 'http://localhost:8000/similar?image='
 IMAGE_FOLDER = '/tmp/HackbopImgs'
 
 DEFAULT_ALBERT_RETURN = '{}'
@@ -74,8 +82,11 @@ def save_image_locally(upload_file):
 	fout.close()
 	return file_path
 
-def albert_call_img_search_algorithm(uploaded_file):
-	img_search_url = ALBERT_SEARCH_WEBADDRESS + uploaded_file
+def albert_call_img_search_algorithm(uploaded_file = "", imageUrl = ""):
+        if len(imageUrl) > 0:
+		img_search_url = SEARCH_BY_URL_ADDRESS + imageUrl
+	else:
+		img_search_url = ALBERT_SEARCH_WEBADDRESS + uploaded_file
 	print "HTTP GET: " + img_search_url
 
 	img_search_result = DEFAULT_ALBERT_RETURN
@@ -131,13 +142,15 @@ class home:
 		return template([])
 
 	def POST(self):
-		web_input = web.input(uploadField={})    
-		print "Recieved: " + web_input.uploadField.filename
+		web_input_upload_field = web.input(uploadField={})    
+		print "Received uploadField: " + web_input_upload_field.uploadField.filename
+		web_input_url_field = web.input(imageUrl={})    
+		print "Received imageUrl: " + web_input_url_field.imageUrl
 
-		uploaded_file = save_image_locally(web_input.uploadField)
+		uploaded_file = save_image_locally(web_input_upload_field.uploadField)
 		print "uploaded_file: " + uploaded_file
 
-		result = albert_call_img_search_algorithm(uploaded_file)
+		result = albert_call_img_search_algorithm(uploaded_file, web_input_url_field.imageUrl)
 
 		template = web.template.Template(HTTP_TEMPLATE_RESPONSE)
 

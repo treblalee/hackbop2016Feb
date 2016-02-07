@@ -140,7 +140,11 @@ class home:
 		result = albert_call_img_search_algorithm(uploaded_file)
 
 		template = web.template.Template(HTTP_TEMPLATE_RESPONSE)
-		return template(result["output"])
+
+                if "output" in result:
+			return template(result["output"])
+                else:
+			return template([])
 
 if __name__ == "__main__":
     app.run()

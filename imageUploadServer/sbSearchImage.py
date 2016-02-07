@@ -30,7 +30,7 @@ HTTP_GET_JOSEPH = """
 </html>
 """
 
-HTTP_RESPONSE = """$def with (pairs)
+HTTP_TEMPLATE_RESPONSE = """$def with (pairs)
 <html>
  <body>
   <h1>Pleave provide an image to see similar products on Shopbop<h1>
@@ -38,12 +38,14 @@ HTTP_RESPONSE = """$def with (pairs)
    <input type="file" name="uploadField"/>
    <input type="submit" value="Submit">
   </form>
-  $for pair in pairs:
-    <p>
-      <a href=\"$pair["detailPageUrl"]\">
-        <img src=\"$pair["imageUrl"]\">
-      </a>
-    </p>
+  $if len(pairs) > 0:
+    <h2>Similar Shopbop products below<h2>
+    $for pair in pairs:
+      <p>
+        <a href=\"$pair["detailPageUrl"]\">
+          <img src=\"$pair["imageUrl"]\">
+        </a>
+      </p>
  </body>
 </html>
 """
@@ -125,7 +127,7 @@ class joseph_search_image:
 
 class home:
 	def GET(self):
-                template = web.template.Template(HTTP_RESPONSE)
+                template = web.template.Template(HTTP_TEMPLATE_RESPONSE)
 		return template([])
 
 	def POST(self):
@@ -137,7 +139,7 @@ class home:
 
 		result = albert_call_img_search_algorithm(uploaded_file)
 
-		template = web.template.Template(HTTP_RESPONSE)
+		template = web.template.Template(HTTP_TEMPLATE_RESPONSE)
 		return template(result["output"])
 
 if __name__ == "__main__":

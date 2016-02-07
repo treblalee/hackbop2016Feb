@@ -39,7 +39,14 @@ HTTP_TEMPLATE_RESPONSE = """$def with (pairs, inputUrl = "")
       Upload an image here: <input type="file" name="uploadField" value=""/>
     </p>
     <p>
-      Or provide an image url such as https://s3.amazonaws.com/treblalee.images/watches7.jpg here: <input type="text" name="imageUrl" value=""/>
+      Or provide an image url here: <input type="text" name="imageUrl" value=""/><br>
+      <br>
+      Here are some sample images to get you started:<br>
+      https://s3.amazonaws.com/treblalee.images/watches7.jpg<br>
+      https://s3.amazonaws.com/treblalee.images/pumps63.jpg<br>
+      https://s3.amazonaws.com/treblalee.images/glasses43.jpg<br>
+      https://s3.amazonaws.com/treblalee.images/jeans6.jpg<br>
+      https://s3.amazonaws.com/treblalee.images/wallets22.jpg<br>
     </p>
     <p>
       <input type="submit" value="Submit">

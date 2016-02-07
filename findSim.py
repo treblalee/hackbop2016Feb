@@ -4,6 +4,8 @@ import distance
 import urllib2 as urllib
 import io
 import json
+import traceback
+import sys
 
 """
 Demo of hashing
@@ -35,14 +37,18 @@ def find_similar_images(userpath = "localS3Images", hashfunc = imagehash.dhash, 
         imageToDetailPageMapping[imageUrl] = detailPageUrl
 
     # compute hash of input image
-    if len(inputFilePath) > 0:
-        image_file = inputFilePath
-        inputAsString = inputFilePath
-    else:
-        fd = urllib.urlopen(inputUrl)
-        image_file = io.BytesIO(fd.read())
-        inputAsString = inputUrl
-    inputHash = str(hashfunc(Image.open(image_file)))
+    try:
+        if len(inputFilePath) > 0:
+            image_file = inputFilePath
+            inputAsString = inputFilePath
+        else:
+            fd = urllib.urlopen(inputUrl)
+            image_file = io.BytesIO(fd.read())
+            inputAsString = inputUrl
+        inputHash = str(hashfunc(Image.open(image_file)))
+    except:
+        traceback.print_exc(file=sys.stdout)
+        return json.dumps({}, sort_keys=True, indent=4, separators=(',', ': '))
     
     # compute hashes of all images in DB (currently just a directory)
     image_filenames = [os.path.join(userpath, path) for path in os.listdir(userpath) if is_image(path)]

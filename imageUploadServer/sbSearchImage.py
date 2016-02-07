@@ -51,7 +51,7 @@ HTTP_TEMPLATE_RESPONSE = """$def with (pairs, inputUrl = "")
       <img src=\"$inputUrl\">
     </p>
   $if len(pairs) > 0:
-    <header><h2>Similar Shopbop products below<h2></header>
+    <header><h2>Similar Shopbop products you can click on below<h2></header>
     $for pair in pairs:
       <p>
         <a href=\"$pair["detailPageUrl"]\">

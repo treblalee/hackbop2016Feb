@@ -4,6 +4,7 @@ import json
 import os
 import uuid
 import urllib2
+import base64
 
 # html test forms
 HTTP_GET_ALBERT = """
@@ -130,6 +131,8 @@ class albert_search_image:
 	def POST(self):
 		web_input = web.input(uploadField={})    
 		print "Recieved: " + web_input.uploadField.filename
+                web_input.uploadField.filename = base64.urlsafe_b64encode(web_input.uploadField.filename)
+		print "Filename as base64: " + web_input.uploadField.filename
 
 		uploaded_file = save_image_locally(web_input.uploadField)
 		print "uploaded_file: " + uploaded_file
@@ -156,6 +159,8 @@ class home:
 	def POST(self):
 		web_input_upload_field = web.input(uploadField={})    
 		print "Received uploadField: " + web_input_upload_field.uploadField.filename
+                web_input_upload_field.uploadField.filename = base64.urlsafe_b64encode(web_input_upload_field.uploadField.filename)
+		print "UploadField filename as base64: " + web_input_upload_field.uploadField.filename
 		web_input_url_field = web.input(imageUrl={})    
 		print "Received imageUrl: " + web_input_url_field.imageUrl
 

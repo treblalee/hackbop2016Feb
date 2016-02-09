@@ -35,6 +35,7 @@ HTTP_TEMPLATE_RESPONSE = """$def with (pairs, inputUrl = "")
 <html>
  <body>
   <header><h1>Pleave provide an image to see similar products on Shopbop<h1></header>
+  <header><h4>(note that we currently only support the following product categories on Shopbop: watches, pumps, glasses, jeans, wallets)<h4></header>
   <form name="testForm" action="http://hackbop.treblalee.com" method="post" enctype="multipart/form-data">
     <p>
       Upload an image here: <input type="file" name="uploadField" value=""/>
